@@ -280,7 +280,7 @@ export default {
 				host = hosts[Math.floor(Math.random() * hosts.length)];
 			}
 			password = env.PASSWORD || "null";
-			path = env.PATH || "/?ed=2560";
+			path = env.PATH || "/proxyIP=proxyip.jp.fxxk.dedyn.io";
 			sni = env.SNI || host;
 			RproxyIP = env.RPROXYIP || RproxyIP;
 
