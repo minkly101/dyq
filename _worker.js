@@ -344,7 +344,7 @@ export default {
 			}
 			
 			if (!path || path.trim() === '') {
-				path = '/?ed=2560';
+				path = '/proxyIP=proxyip.jp.fxxk.dedyn.io';
 			} else {
 				// 如果第一个字符不是斜杠，则在前面添加一个斜杠
 				path = (path[0] === '/') ? path : '/' + path;
