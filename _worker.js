@@ -15,36 +15,31 @@ let addressesapi = [
 	//'https://raw.githubusercontent.com/cmliu/WorkerVless2sub/main/addressesipv6api.txt', //IPv6优选内容格式 自行搭建。
 ];
 
-// 设置优选地址，不带端口号默认80，noTLS订阅生成
-let addressesnotls = [
-	'www.visa.com.sg#官方优选域名',
-	'www.wto.org:8080#官方优选域名',
-	'www.who.int:8880#官方优选域名',
-];
-
-// 设置优选noTLS地址api接口
-let addressesnotlsapi = [
-	'https://raw.githubusercontent.com/cmliu/CFcdnVmess2sub/main/addressesapi.txt', //可参考内容格式 自行搭建。
-];
-
 let DLS = 8;//速度下限
 let addressescsv = [
 	//'https://raw.githubusercontent.com/cmliu/WorkerVless2sub/main/addressescsv.csv', //iptest测速结果文件。
 ];
 
 let subconverter = "apiurl.v1.mk"; //在线订阅转换后端，目前使用肥羊的订阅转换功能。支持自建psub 可自行搭建https://github.com/bulianglin/psub
-let subconfig = "https://raw.githubusercontent.com/cmliu/ACL4SSR/main/Clash/config/ACL4SSR_Online_Full_MultiMode.ini"; //订阅转换配置文件
-let noTLS = false; //改为 true , 将不做域名判断 始终返回noTLS节点
+let subconfig = "https://raw.githubusercontent.com/JustLagom/Trojan-Sub/main/urltestconfig.ini"; //订阅转换配置文件
 let link = '';
 let edgetunnel = 'ed';
 let RproxyIP = 'false';
 let proxyIPs = [
-	'proxyip.aliyun.fxxk.dedyn.io',
-	'proxyip.multacom.fxxk.dedyn.io',
+	'proxyip.sg.fxxk.dedyn.io',
+	'proxyip.jp.fxxk.dedyn.io',
+	'proxyip.hk.fxxk.dedyn.io',
+	'proxyip.kr.fxxk.dedyn.io',
+	'proxyip.tw.fxxk.dedyn.io',
 	'proxyip.vultr.fxxk.dedyn.io',
 ];
 let CMproxyIPs = [
-	//{ proxyIP: "proxyip.fxxk.dedyn.io", type: "HK" },
+	{ proxyIP: "proxyip.vultr.fxxk.dedyn.io", type: "US" },
+	{ proxyIP: "proxyip.sg.fxxk.dedyn.io", type: "SG" },
+	{ proxyIP: "proxyip.jp.fxxk.dedyn.io", type: "JP" },
+	{ proxyIP: "proxyip.hk.fxxk.dedyn.io", type: "HK" },
+	{ proxyIP: "proxyip.kr.fxxk.dedyn.io", type: "KR" },
+	{ proxyIP: "proxyip.tw.fxxk.dedyn.io", type: "TW" },
 ];
 let BotToken ='';
 let ChatID =''; 
@@ -54,7 +49,7 @@ let proxyhosts = [//本地代理域名池
 let proxyhostsURL = 'https://raw.githubusercontent.com/cmliu/CFcdnVmess2sub/main/proxyhosts';//在线代理域名池URL
 let EndPS = '';//节点名备注内容
 
-let FileName = 'WorkerVless2sub';
+let FileName = 'TrojanSub';
 let SUBUpdateTime = 6; 
 let total = 99;//PB
 //let timestamp = now;
@@ -250,7 +245,7 @@ export default {
 		const url = new URL(request.url);
 		const format = url.searchParams.get('format') ? url.searchParams.get('format').toLowerCase() : "null";
 		let host = "";
-		let uuid = "";
+		let password = "";
 		let path = "";
 		let sni = "";
 		let UD = Math.floor(((timestamp - Date.now())/timestamp * 99 * 1099511627776 * 1024)/2);
@@ -264,8 +259,6 @@ export default {
 		
 		if (env.ADD) addresses = await ADD(env.ADD);
 		if (env.ADDAPI) addressesapi = await ADD(env.ADDAPI);
-		if (env.ADDNOTLS) addressesnotls = await ADD(env.ADDNOTLS);
-		if (env.ADDNOTLSAPI) addressesnotlsapi = await ADD(env.ADDNOTLSAPI);
 		if (env.ADDCSV) addressescsv = await ADD(env.ADDCSV);
 		DLS = env.DLS || DLS;
 
@@ -289,17 +282,16 @@ export default {
 				const hosts = await ADD(env.HOST);
 				host = hosts[Math.floor(Math.random() * hosts.length)];
 			}
-			uuid = env.UUID || "null";
+			password = env.PASSWORD || "null";
 			path = env.PATH || "/?ed=2560";
 			sni = env.SNI || host;
-			edgetunnel = env.ED || edgetunnel;
 			RproxyIP = env.RPROXYIP || RproxyIP;
 
-			if (host == "null" || uuid == "null" ){
+			if (host == "null" || password == "null" ){
 				let 空字段;
-				if (host == "null" && uuid == "null") 空字段 = "HOST/UUID";
+				if (host == "null" && password == "null") 空字段 = "HOST/PASSWORD";
 				else if (host == "null") 空字段 = "HOST";
-				else if (uuid == "null") 空字段 = "UUID";
+				else if (password == "null") 空字段 = "PASSWORD";
 				EndPS += ` 订阅器内置节点 ${空字段} 未设置！！！`;
 			}
 
@@ -323,10 +315,9 @@ export default {
 		await sendMessage("#获取订阅", request.headers.get('CF-Connecting-IP'), `UA: ${userAgentHeader}</tg-spoiler>\n域名: ${url.hostname}\n<tg-spoiler>入口: ${url.pathname + url.search}</tg-spoiler>`);
 		} else {
 			host = url.searchParams.get('host');
-			uuid = url.searchParams.get('uuid');
+			password = url.searchParams.get('password');
 			path = url.searchParams.get('path');
 			sni = url.searchParams.get('sni') || host;
-			edgetunnel = url.searchParams.get('edgetunnel') || edgetunnel;
 			RproxyIP = url.searchParams.get('proxyip') || RproxyIP;
 			
 			if (!url.pathname.includes("/sub")) {
@@ -344,21 +335,9 @@ export default {
 				});
 			}
 			
-			if (!host || !uuid) {
+			if (!host || !password) {
 				const responseText = `
-			缺少必填参数：host 和 uuid
-			Missing required parameters: host and uuid
-			پارامترهای ضروری وارد نشده: هاست و یوآی‌دی
-			
-			${url.origin}/sub?host=[your host]&uuid=[your uuid]&path=[your path]
-			
-			
-			
-			
-			
-			
-				
-				https://github.com/cmliu/WorkerVless2sub
+			缺少必填参数：host 和 password
 				`;
 			
 				return new Response(responseText, {
@@ -374,10 +353,7 @@ export default {
 				path = (path[0] === '/') ? path : '/' + path;
 			}
 		}
-		
-		noTLS = host.toLowerCase().includes('notls') || host.toLowerCase().includes('worker') || host.toLowerCase().includes('trycloudflare') || noTLS;
-		if(env.NOTLS == 'true')noTLS = true;
-		
+			
 		if (!userAgent.includes('subconverter') && MamaJustKilledAMan.some(PutAGunAgainstHisHeadPulledMyTriggerNowHesDead => userAgent.includes(PutAGunAgainstHisHeadPulledMyTriggerNowHesDead)) && MamaJustKilledAMan.length > 0) {
 			//首页改成一个nginx伪装页
 			return new Response(await nginx(), {
@@ -470,77 +446,6 @@ export default {
 			// 使用Set对象去重
 			const uniqueAddresses = [...new Set(addresses)];
 			
-			let notlsresponseBody;
-			if(noTLS == true){
-				const newAddressesnotlsapi = await getAddressesapi(addressesnotlsapi);
-				const newAddressesnotlscsv = await getAddressescsv('FALSE');
-				addressesnotls = addressesnotls.concat(newAddressesnotlsapi);
-				addressesnotls = addressesnotls.concat(newAddressesnotlscsv);
-				const uniqueAddressesnotls = [...new Set(addressesnotls)];
-
-				notlsresponseBody = uniqueAddressesnotls.map(address => {
-					let port = "80";
-					let addressid = address;
-				
-					const match = addressid.match(regex);
-					if (!match) {
-						if (address.includes(':') && address.includes('#')) {
-							const parts = address.split(':');
-							address = parts[0];
-							const subParts = parts[1].split('#');
-							port = subParts[0];
-							addressid = subParts[1];
-						} else if (address.includes(':')) {
-							const parts = address.split(':');
-							address = parts[0];
-							port = parts[1];
-						} else if (address.includes('#')) {
-							const parts = address.split('#');
-							address = parts[0];
-							addressid = parts[1];
-						}
-					
-						if (addressid.includes(':')) {
-							addressid = addressid.split(':')[0];
-						}
-					} else {
-						address = match[1];
-						port = match[2] || port;
-						addressid = match[3] || address;
-					}
-	
-					//console.log(address, port, addressid);
-
-					if (edgetunnel.trim() === 'cmliu' && RproxyIP.trim() === 'true') {
-					// 将addressid转换为小写
-					let lowerAddressid = addressid.toLowerCase();
-					// 初始化找到的proxyIP为null
-					let foundProxyIP = null;
-						
-					// 遍历CMproxyIPs数组查找匹配项
-					for (let item of CMproxyIPs) {
-						if (lowerAddressid.includes(item.type.toLowerCase())) {
-							foundProxyIP = item.proxyIP;
-							break; // 找到匹配项，跳出循环
-						}
-					}
-						
-					if (foundProxyIP) {
-						// 如果找到匹配的proxyIP，赋值给path
-						path = `/proxyIP=${foundProxyIP}`;
-					} else {
-						// 如果没有找到匹配项，随机选择一个proxyIP
-						const randomProxyIP = proxyIPs[Math.floor(Math.random() * proxyIPs.length)];
-						path = `/proxyIP=${randomProxyIP}`;
-					}
-				}
-
-					const vlessLink = `vless://${uuid}@${address}:${port}?encryption=none&security=&type=ws&host=${host}&path=${encodeURIComponent(path)}#${encodeURIComponent(addressid + EndPS)}`;
-			
-					return vlessLink;
-				}).join('\n');
-			}
-
 			const responseBody = uniqueAddresses.map(address => {
 				let port = "443";
 				let addressid = address;
@@ -574,7 +479,7 @@ export default {
 
 				//console.log(address, port, addressid);
 		
-				if (edgetunnel.trim() === 'cmliu' && RproxyIP.trim() === 'true') {
+				if (RproxyIP.trim() === 'true') {
 					// 将addressid转换为小写
 					let lowerAddressid = addressid.toLowerCase();
 					// 初始化找到的proxyIP为null
@@ -590,24 +495,24 @@ export default {
 				
 					if (foundProxyIP) {
 						// 如果找到匹配的proxyIP，赋值给path
-						path = `/proxyIP=${foundProxyIP}`;
+						path = `/?ed=2560&proxyIP=${foundProxyIP}`;
 					} else {
 						// 如果没有找到匹配项，随机选择一个proxyIP
-						const randomProxyIP = proxyIPs[Math.floor(Math.random() * proxyIPs.length)];
-						path = `/proxyIP=${randomProxyIP}`;
+						path = `/?ed=2560&proxyIP=proxyip.vultr.fxxk.dedyn.io`;
 					}
 				}
 				
 				let 伪装域名 = host ;
-				let 最终路径 = path ;
-				let 节点备注 = EndPS ;
+				let 节点备注 = `${EndPS}`;
+				let 最终路径 = `${path}`;
+				
 				if(proxyhosts && (host.includes('.workers.dev') || host.includes('pages.dev'))) {
-					最终路径 = `/${host}${path}`;
 					伪装域名 = proxyhosts[Math.floor(Math.random() * proxyhosts.length)];
-					节点备注 = `${EndPS} 已启用临时域名中转服务，请尽快绑定自定义域！`;
+					最终路径 = `/${host}${path}`;
 					sni = 伪装域名;
 				}
-				const vlessLink = `vless://${uuid}@${address}:${port}?encryption=none&security=tls&sni=${sni}&fp=random&type=ws&host=${伪装域名}&path=${encodeURIComponent(最终路径)}#${encodeURIComponent(addressid + 节点备注)}`;
+
+				const vlessLink = `trojan://${password}@${address}:${port}?security=tls&sni=${sni}&fp=chrome&type=ws&host=${伪装域名}&path=${encodeURIComponent(最终路径)}#${encodeURIComponent(addressid + 节点备注)}`;
 			
 				return vlessLink;
 			}).join('\n');
@@ -618,12 +523,7 @@ export default {
 				combinedContent += '\n' + link;
 				console.log("link: " + link)
 			}
-			
-			if (notlsresponseBody) {
-				combinedContent += '\n' + notlsresponseBody;
-				console.log("notlsresponseBody: " + notlsresponseBody);
-			}
-			
+						
 			const base64Response = btoa(combinedContent); // 重新进行 Base64 编码
 
 			const response = new Response(base64Response, {
