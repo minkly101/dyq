@@ -1,13 +1,9 @@
 # 优选订阅生成器 WorkerVless2sub
 
-### 这个是一个通过 Cloudflare Workers 搭建，自动生成优选线路 VLESS 节点订阅内容生成器 [[实现原理]](https://www.youtube.com/watch?v=p-KhFJAC4WQ&t=70s)
-
-Telegram交流群：[@CMLiussss](https://t.me/CMLiussss)
-
-# Pages 部署方法 [视频教程](https://www.youtube.com/watch?v=p-KhFJAC4WQ&t=509s)
+### 这个是一个通过 Cloudflare Workers 搭建，自动生成优选线路 VLESS 节点订阅内容生成器
 
 ### 1. 部署 Cloudflare Pages：
-   - 在 Github 上先 Fork 本项目，并点上 Star !!!
+   - 在 Github 上先 Fork 本项目
    - 在 Cloudflare Pages 控制台中选择 `连接到 Git`后，选中 `WorkerVless2sub`项目后点击 `开始设置`。
      
 ### 2. 给 Pages绑定 自定义域：
@@ -51,8 +47,6 @@ Telegram交流群：[@CMLiussss](https://t.me/CMLiussss)
    ```
 
  </details>
-
-# Workers 部署方法 [视频教程](https://youtu.be/AtCF7eq0hcE)
 
 ### 1. 部署 Cloudflare Worker：
 
@@ -116,7 +110,7 @@ Telegram交流群：[@CMLiussss](https://t.me/CMLiussss)
 
 
 
-# 订阅生成器 使用方法 [视频教程](https://youtu.be/OjqCKeEY7DQ)
+# 订阅生成器 使用方法
 
   例如您的workers项目域名为：`sub.cmliussss.workers.dev`；
   
@@ -173,11 +167,4 @@ Telegram交流群：[@CMLiussss](https://t.me/CMLiussss)
 | SUBCONFIG | [https://raw.github.../ACL4SSR_Online_Full_MultiMode.ini](https://raw.githubusercontent.com/cmliu/ACL4SSR/main/Clash/config/ACL4SSR_Online_Full_MultiMode.ini) | clash、singbox等 订阅转换配置文件 | 
 | SUBNAME | WorkerVless2sub | 订阅生成器名称 | 
 | PS | 【请勿测速】 | 节点名备注消息 | 
-
-## Star 星星走起
-[![Stargazers over time](https://starchart.cc/cmliu/WorkerVless2sub.svg?variant=adaptive)](https://starchart.cc/cmliu/WorkerVless2sub)
-
-# 感谢
-我自己的脑洞，[SAKURA-YUMI](https://github.com/SAKURA-YUMI)，[EzSync](https://github.com/EzSync)、[ACL4SSR](https://github.com/ACL4SSR/ACL4SSR/tree/master/Clash/config)、[肥羊](https://github.com/youshandefeiyang/sub-web-modify)
-
 
