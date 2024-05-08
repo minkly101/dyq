@@ -487,7 +487,7 @@ export default {
 						path = `/proxyIP=proxyip.sg.fxxk.dedyn.io&proxyIP=${foundProxyIP}`;
 					} else {
 						// 如果没有找到匹配项，随机选择一个proxyIP
-						path = `/proxyIP=proxyip.sg.fxxk.dedyn.io&proxyIP=proxyip.us.fxxk.dedyn.io`;
+						path = `/proxyIP=proxyip.sg.fxxk.dedyn.io`;
 					}
 				}
 				
