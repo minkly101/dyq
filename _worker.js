@@ -24,19 +24,11 @@ let edgetunnel = 'ed';
 let RproxyIP = 'false';
 let proxyIPs = [
 	'proxyip.sg.fxxk.dedyn.io',
-	'proxyip.jp.fxxk.dedyn.io',
-	'proxyip.hk.fxxk.dedyn.io',
-	'proxyip.kr.fxxk.dedyn.io',
-	'proxyip.tw.fxxk.dedyn.io',
-	'proxyip.vultr.fxxk.dedyn.io',
+	'proxyip.us.fxxk.dedyn.io',
 ];
 let CMproxyIPs = [
-	{ proxyIP: "proxyip.vultr.fxxk.dedyn.io", type: "US" },
+	{ proxyIP: "proxyip.us.fxxk.dedyn.io", type: "US" },
 	{ proxyIP: "proxyip.sg.fxxk.dedyn.io", type: "SG" },
-	{ proxyIP: "proxyip.jp.fxxk.dedyn.io", type: "JP" },
-	{ proxyIP: "proxyip.hk.fxxk.dedyn.io", type: "HK" },
-	{ proxyIP: "proxyip.kr.fxxk.dedyn.io", type: "KR" },
-	{ proxyIP: "proxyip.tw.fxxk.dedyn.io", type: "TW" },
 ];
 let BotToken ='';
 let ChatID =''; 
@@ -344,7 +336,7 @@ export default {
 			}
 			
 			if (!path || path.trim() === '') {
-				path = '/proxyIP=proxyip.jp.fxxk.dedyn.io';
+				path = '/proxyIP=proxyip.sg.fxxk.dedyn.io';
 			} else {
 				// 如果第一个字符不是斜杠，则在前面添加一个斜杠
 				path = (path[0] === '/') ? path : '/' + path;
@@ -492,10 +484,10 @@ export default {
 				
 					if (foundProxyIP) {
 						// 如果找到匹配的proxyIP，赋值给path
-						path = `/proxyIP=proxyip.jp.fxxk.dedyn.io&proxyIP=${foundProxyIP}`;
+						path = `/proxyIP=proxyip.sg.fxxk.dedyn.io&proxyIP=${foundProxyIP}`;
 					} else {
 						// 如果没有找到匹配项，随机选择一个proxyIP
-						path = `/proxyIP=proxyip.jp.fxxk.dedyn.io&proxyIP=proxyip.vultr.fxxk.dedyn.io`;
+						path = `/proxyIP=proxyip.sg.fxxk.dedyn.io&proxyIP=proxyip.us.fxxk.dedyn.io`;
 					}
 				}
 				
